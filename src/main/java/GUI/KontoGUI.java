@@ -19,6 +19,7 @@ public class KontoGUI extends javax.swing.JFrame {
     private BL bl = new BL();
     public KontoGUI() {
         initComponents();
+        liAll.setModel(bl);
     }
 
     /**
@@ -38,8 +39,8 @@ public class KontoGUI extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         laAmount = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        liUser = new javax.swing.JList<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        liAll = new javax.swing.JList<>();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         taOut = new javax.swing.JTextArea();
@@ -82,18 +83,17 @@ public class KontoGUI extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("User"));
         jPanel2.setMinimumSize(new java.awt.Dimension(35, 300));
         jPanel2.setPreferredSize(new java.awt.Dimension(100, 300));
-        jPanel2.setSize(new java.awt.Dimension(0, 300));
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        liUser.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        liAll.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
+        liAll.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                liAllonChangeDir(evt);
+            }
         });
-        liUser.setComponentPopupMenu(pmUser);
-        jScrollPane2.setViewportView(liUser);
+        jScrollPane1.setViewportView(liAll);
 
-        jPanel2.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.LINE_START);
 
@@ -123,7 +123,7 @@ public class KontoGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_miAddUserActionPerformed
 
     private void miTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miTestActionPerformed
-        // TODO add your handling code here:
+        bl.performTest(liUser.getSelectedIndices());
     }//GEN-LAST:event_miTestActionPerformed
 
     private void miAddKontoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAddKontoActionPerformed
@@ -138,6 +138,35 @@ public class KontoGUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "The account was added a while ago.. no need to do it again :D");
         }
     }//GEN-LAST:event_miAddKontoActionPerformed
+
+    private void liAllonChangeDir(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_liAllonChangeDir
+        if (evt.getClickCount() == 2) {
+            String path = bl.getElementAt(liAll.getSelectedIndex()).getAbsolutePath();
+            File currDirUpdate = new File(path);
+            if (currDirUpdate.isFile()) {
+                try{
+                    if(!Desktop.isDesktopSupported()){
+
+                    }
+                    else{
+                        Desktop desktop = Desktop.getDesktop();
+                        if(currDirUpdate.exists()){
+                            desktop.open(currDirUpdate);
+                        }
+                    }
+                }
+                catch(Exception ex){
+                    JOptionPane.showMessageDialog(null,"File cannot be opened!");
+                }
+            } else {
+                bl.deleteAll();
+                bl.add(currDirUpdate.getAbsolutePath() + "/..");
+                for (File file : currDirUpdate.listFiles()) {
+                    bl.add(file.getAbsolutePath());
+                }
+            }
+        }
+    }//GEN-LAST:event_liAllonChangeDir
 
     /**
      * @param args the command line arguments
@@ -178,10 +207,10 @@ public class KontoGUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel laAmount;
-    private javax.swing.JList<String> liUser;
+    private javax.swing.JList<myFile> liAll;
     private javax.swing.JMenuItem miAddKonto;
     private javax.swing.JMenuItem miAddUser;
     private javax.swing.JMenuItem miTest;
