@@ -7,6 +7,7 @@ package GUI;
 
 import BL.BL;
 import BL.Konto;
+import BL.KontoBenutzer;
 import javax.swing.JOptionPane;
 
 /**
@@ -16,10 +17,10 @@ import javax.swing.JOptionPane;
 public class KontoGUI extends javax.swing.JFrame {
 
     private Konto account = null;
-    private BL bl = new BL();
+    private final BL bl = new BL();
     public KontoGUI() {
         initComponents();
-        liAll.setModel(bl);
+        liUsers.setModel(bl);
     }
 
     /**
@@ -40,7 +41,7 @@ public class KontoGUI extends javax.swing.JFrame {
         laAmount = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        liAll = new javax.swing.JList<>();
+        liUsers = new javax.swing.JList<>();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         taOut = new javax.swing.JTextArea();
@@ -85,13 +86,8 @@ public class KontoGUI extends javax.swing.JFrame {
         jPanel2.setPreferredSize(new java.awt.Dimension(100, 300));
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        liAll.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
-        liAll.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                liAllonChangeDir(evt);
-            }
-        });
-        jScrollPane1.setViewportView(liAll);
+        liUsers.setComponentPopupMenu(pmUser);
+        jScrollPane1.setViewportView(liUsers);
 
         jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
@@ -116,6 +112,7 @@ public class KontoGUI extends javax.swing.JFrame {
     private void miAddUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAddUserActionPerformed
         if(account != null){
             String name = JOptionPane.showInputDialog("Please enter the name: ");
+            bl.add(new KontoBenutzer(account, name));
         }
         else {
             JOptionPane.showMessageDialog(null, "Please add an account first!");
@@ -123,7 +120,7 @@ public class KontoGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_miAddUserActionPerformed
 
     private void miTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miTestActionPerformed
-        bl.performTest(liUser.getSelectedIndices());
+        bl.performTest(liUsers.getSelectedIndices());
     }//GEN-LAST:event_miTestActionPerformed
 
     private void miAddKontoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAddKontoActionPerformed
@@ -138,35 +135,6 @@ public class KontoGUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "The account was added a while ago.. no need to do it again :D");
         }
     }//GEN-LAST:event_miAddKontoActionPerformed
-
-    private void liAllonChangeDir(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_liAllonChangeDir
-        if (evt.getClickCount() == 2) {
-            String path = bl.getElementAt(liAll.getSelectedIndex()).getAbsolutePath();
-            File currDirUpdate = new File(path);
-            if (currDirUpdate.isFile()) {
-                try{
-                    if(!Desktop.isDesktopSupported()){
-
-                    }
-                    else{
-                        Desktop desktop = Desktop.getDesktop();
-                        if(currDirUpdate.exists()){
-                            desktop.open(currDirUpdate);
-                        }
-                    }
-                }
-                catch(Exception ex){
-                    JOptionPane.showMessageDialog(null,"File cannot be opened!");
-                }
-            } else {
-                bl.deleteAll();
-                bl.add(currDirUpdate.getAbsolutePath() + "/..");
-                for (File file : currDirUpdate.listFiles()) {
-                    bl.add(file.getAbsolutePath());
-                }
-            }
-        }
-    }//GEN-LAST:event_liAllonChangeDir
 
     /**
      * @param args the command line arguments
@@ -210,7 +178,7 @@ public class KontoGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel laAmount;
-    private javax.swing.JList<myFile> liAll;
+    private javax.swing.JList<KontoBenutzer> liUsers;
     private javax.swing.JMenuItem miAddKonto;
     private javax.swing.JMenuItem miAddUser;
     private javax.swing.JMenuItem miTest;

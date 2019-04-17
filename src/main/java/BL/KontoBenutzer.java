@@ -68,4 +68,11 @@ public class KontoBenutzer extends Thread {
         }
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+    
+    
+
 }
