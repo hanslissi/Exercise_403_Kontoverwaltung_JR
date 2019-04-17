@@ -5,6 +5,8 @@
  */
 package BL;
 
+import Observer.Observer;
+import Observer.Subject;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,14 +15,16 @@ import java.util.logging.Logger;
  *
  * @author johannesriedmueller
  */
-public class KontoBenutzer extends Thread {
+public class KontoBenutzer extends Thread implements Subject {
 
     private Konto account;
     private String name;
+    private final Observer observer;
 
-    public KontoBenutzer(Konto konto, String name) {
-        this.account = konto;
+    public KontoBenutzer(Konto account, String name, Observer observer) {
+        this.account = account;
         this.name = name;
+        this.observer = observer;
     }
 
     public void deposit(double amount) {
@@ -36,18 +40,20 @@ public class KontoBenutzer extends Thread {
         int i = 0;
         Random r = new Random();
         while (i < 10) {
-            int res = r.nextInt(1);
+            int res = r.nextInt(2);
             int amount = 10 + r.nextInt(50);
             synchronized (account) {
                 switch (res) {
                     case 0:
                         deposit(amount);
+                        inform(name + " deposited € " + amount + ",-\n");
                         account.notifyAll();
                         i++;
                         break;
                     case 1:
                         try {
                             withdraw(amount);
+                            inform(name + " has withdrawn € " + amount + ",-\n");
                         } catch (EmptyException empty) {
                             try {
                                 account.wait();
@@ -72,7 +78,10 @@ public class KontoBenutzer extends Thread {
     public String toString() {
         return name;
     }
-    
-    
+
+    @Override
+    public void inform(String str) {
+        observer.update(str);
+    }
 
 }

@@ -8,13 +8,14 @@ package GUI;
 import BL.BL;
 import BL.Konto;
 import BL.KontoBenutzer;
+import Observer.Observer;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author johannesriedmueller
  */
-public class KontoGUI extends javax.swing.JFrame {
+public class KontoGUI extends javax.swing.JFrame implements Observer{
 
     private Konto account = null;
     private final BL bl = new BL();
@@ -37,8 +38,7 @@ public class KontoGUI extends javax.swing.JFrame {
         miTest = new javax.swing.JMenuItem();
         pmAccount = new javax.swing.JPopupMenu();
         miAddKonto = new javax.swing.JMenuItem();
-        jPanel1 = new javax.swing.JPanel();
-        laAmount = new javax.swing.JLabel();
+        paAccountLabel = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         liUsers = new javax.swing.JList<>();
@@ -72,14 +72,10 @@ public class KontoGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Account"));
-        jPanel1.setPreferredSize(new java.awt.Dimension(400, 60));
-        jPanel1.setLayout(new java.awt.BorderLayout());
-
-        laAmount.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jPanel1.add(laAmount, java.awt.BorderLayout.CENTER);
-
-        getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_END);
+        paAccountLabel.setBorder(javax.swing.BorderFactory.createTitledBorder("Account"));
+        paAccountLabel.setPreferredSize(new java.awt.Dimension(400, 60));
+        paAccountLabel.setLayout(new java.awt.GridLayout(1, 1));
+        getContentPane().add(paAccountLabel, java.awt.BorderLayout.PAGE_END);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("User"));
         jPanel2.setMinimumSize(new java.awt.Dimension(35, 300));
@@ -97,6 +93,7 @@ public class KontoGUI extends javax.swing.JFrame {
         jPanel3.setPreferredSize(new java.awt.Dimension(100, 200));
         jPanel3.setLayout(new java.awt.BorderLayout());
 
+        taOut.setEditable(false);
         taOut.setColumns(20);
         taOut.setRows(5);
         taOut.setComponentPopupMenu(pmAccount);
@@ -112,7 +109,7 @@ public class KontoGUI extends javax.swing.JFrame {
     private void miAddUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAddUserActionPerformed
         if(account != null){
             String name = JOptionPane.showInputDialog("Please enter the name: ");
-            bl.add(new KontoBenutzer(account, name));
+            bl.add(new KontoBenutzer(account, name, this));
         }
         else {
             JOptionPane.showMessageDialog(null, "Please add an account first!");
@@ -129,7 +126,10 @@ public class KontoGUI extends javax.swing.JFrame {
             dialog.setVisible(true);
             if(dialog.isOk()){
                 this.account = dialog.getAccount();
+                this.paAccountLabel.add(account);
+                revalidate();
             }
+            
         }
         else{
             JOptionPane.showMessageDialog(null, "The account was added a while ago.. no need to do it again :D");
@@ -172,18 +172,22 @@ public class KontoGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JLabel laAmount;
     private javax.swing.JList<KontoBenutzer> liUsers;
     private javax.swing.JMenuItem miAddKonto;
     private javax.swing.JMenuItem miAddUser;
     private javax.swing.JMenuItem miTest;
+    private javax.swing.JPanel paAccountLabel;
     private javax.swing.JPopupMenu pmAccount;
     private javax.swing.JPopupMenu pmUser;
     private javax.swing.JTextArea taOut;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void update(String str) {
+        taOut.append(str);
+    }
 }

@@ -14,13 +14,13 @@ import javax.swing.JLabel;
  */
 public class Konto extends JLabel{
     private double balance;
-
     public void updateTextDisplay(){
         this.setText(String.format("%.2f", balance));
     }
     
     public Konto(double balance) {
         this.balance = balance;
+        this.setHorizontalAlignment(RIGHT);
         updateTextDisplay();
     }
     
