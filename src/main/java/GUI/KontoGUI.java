@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import BL.BL;
 import BL.Konto;
 import javax.swing.JOptionPane;
 
@@ -15,6 +16,7 @@ import javax.swing.JOptionPane;
 public class KontoGUI extends javax.swing.JFrame {
 
     private Konto account = null;
+    private BL bl = new BL();
     public KontoGUI() {
         initComponents();
     }
@@ -114,7 +116,9 @@ public class KontoGUI extends javax.swing.JFrame {
     private void miAddUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAddUserActionPerformed
         if(account != null){
             String name = JOptionPane.showInputDialog("Please enter the name: ");
-            
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Please add an account first!");
         }
     }//GEN-LAST:event_miAddUserActionPerformed
 
@@ -129,6 +133,9 @@ public class KontoGUI extends javax.swing.JFrame {
             if(dialog.isOk()){
                 this.account = dialog.getAccount();
             }
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "The account was added a while ago.. no need to do it again :D");
         }
     }//GEN-LAST:event_miAddKontoActionPerformed
 
