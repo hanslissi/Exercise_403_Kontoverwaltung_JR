@@ -5,15 +5,16 @@
  */
 package GUI;
 
+import BL.Konto;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author johannesriedmueller
  */
 public class KontoGUI extends javax.swing.JFrame {
 
-    /**
-     * Creates new form KontoGUI
-     */
+    private Konto account = null;
     public KontoGUI() {
         initComponents();
     }
@@ -30,6 +31,8 @@ public class KontoGUI extends javax.swing.JFrame {
         pmUser = new javax.swing.JPopupMenu();
         miAddUser = new javax.swing.JMenuItem();
         miTest = new javax.swing.JMenuItem();
+        pmAccount = new javax.swing.JPopupMenu();
+        miAddKonto = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         laAmount = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -39,11 +42,29 @@ public class KontoGUI extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         taOut = new javax.swing.JTextArea();
 
-        miAddUser.setText("jMenuItem1");
+        miAddUser.setText("Add User");
+        miAddUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miAddUserActionPerformed(evt);
+            }
+        });
         pmUser.add(miAddUser);
 
-        miTest.setText("jMenuItem2");
+        miTest.setText("Perform account test");
+        miTest.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miTestActionPerformed(evt);
+            }
+        });
         pmUser.add(miTest);
+
+        miAddKonto.setText("Add Account");
+        miAddKonto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miAddKontoActionPerformed(evt);
+            }
+        });
+        pmAccount.add(miAddKonto);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,6 +101,7 @@ public class KontoGUI extends javax.swing.JFrame {
 
         taOut.setColumns(20);
         taOut.setRows(5);
+        taOut.setComponentPopupMenu(pmAccount);
         jScrollPane3.setViewportView(taOut);
 
         jPanel3.add(jScrollPane3, java.awt.BorderLayout.CENTER);
@@ -88,6 +110,27 @@ public class KontoGUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void miAddUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAddUserActionPerformed
+        if(account != null){
+            String name = JOptionPane.showInputDialog("Please enter the name: ");
+            
+        }
+    }//GEN-LAST:event_miAddUserActionPerformed
+
+    private void miTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miTestActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_miTestActionPerformed
+
+    private void miAddKontoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAddKontoActionPerformed
+        if(account == null){
+            KontoDialog dialog = new KontoDialog(this, true);
+            dialog.setVisible(true);
+            if(dialog.isOk()){
+                this.account = dialog.getAccount();
+            }
+        }
+    }//GEN-LAST:event_miAddKontoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -132,8 +175,10 @@ public class KontoGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel laAmount;
     private javax.swing.JList<String> liUser;
+    private javax.swing.JMenuItem miAddKonto;
     private javax.swing.JMenuItem miAddUser;
     private javax.swing.JMenuItem miTest;
+    private javax.swing.JPopupMenu pmAccount;
     private javax.swing.JPopupMenu pmUser;
     private javax.swing.JTextArea taOut;
     // End of variables declaration//GEN-END:variables

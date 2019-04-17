@@ -5,29 +5,23 @@
  */
 package BL;
 
-import java.util.ArrayList;
 
 /**
  *
  * @author johannesriedmueller
  */
 public class Konto {
-    private ArrayList<KontoBenutzer> user = new ArrayList<>();
     private double balance;
 
     public Konto(double balance) {
         this.balance = balance;
     }
     
-    public void addUser(KontoBenutzer user){
-        this.user.add(user);
-    }
-    
-    public void deposit(double amount){
+    public synchronized void deposit(double amount){
         this.balance += amount;
     }
     
-    public void withdraw(double amount){
+    public synchronized void withdraw(double amount){
         this.balance -= amount;
     }
 }

@@ -10,5 +10,19 @@ package BL;
  * @author johannesriedmueller
  */
 public class KontoBenutzer {
+    private Konto konto;
+    private String name;
+
+    public KontoBenutzer(Konto konto, String name) {
+        this.konto = konto;
+        this.name = name;
+    }
     
+    public void deposit(double amount){
+        konto.deposit(amount);
+    }
+    
+    public void withdraw(double amount){
+        konto.withdraw(amount);
+    }
 }
