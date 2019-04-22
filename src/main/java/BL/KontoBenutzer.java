@@ -72,6 +72,7 @@ public class KontoBenutzer extends Thread implements Subject {
                 Logger.getLogger(KontoBenutzer.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        inform(name+" done!\n");
     }
 
     @Override
